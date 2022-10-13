@@ -98,6 +98,7 @@ LOW - 7 questions (~9%)
 
 #### What are primitive data types?
 
+
 #### What are the possible ways to create objects in JavaScript?
 #### What is undefined property?
 #### What is null value?
