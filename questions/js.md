@@ -8,8 +8,8 @@ LOW - 7 questions (~9%)
 
 | No.  | Questions                                                                    | Priority |
 |------|------------------------------------------------------------------------------|----------|
-| 1    | [Data Types](#data-types)                                                    |          |
-| 1.1  | [What are primitive data types?](#primitive-data-types)                                             | HIGH     |
+| 1    | [Data Types](https://github.com/szkertesz/crack-ti/blob/main/questions/js.md#data-types)                                                    |          |
+| 1.1  | [What are primitive data types?](https://github.com/szkertesz/crack-ti/blob/main/questions/js.md#primitive-data-types)                                             | HIGH     |
 | 1.2  | What are the possible ways to create objects in JavaScript?                  | MEDIUM   |
 | 1.3  | What is undefined property?                                                  | HIGH     |
 | 1.4  | What is null value?                                                          | HIGH     |
@@ -94,4 +94,6 @@ LOW - 7 questions (~9%)
 | 7.15 | What is nodejs?                                                              | HIGH     |
 
 ### Data Types
+
+#### What are primitive data types?
 
