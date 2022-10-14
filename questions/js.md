@@ -97,17 +97,43 @@ LOW - 7 questions (~9%)
 ## Data Types
 
 ### What are primitive data types?
+- Primitive values (immutable values)
+    - Boolean type
+    Boolean represents a logical entity and can have two values: true and false.
+    - Null type
+    - Undefined type
+    - Number type
+    - BigInt type
+    - String type
+    String type is used to represent textual data
+    - Symbol type
+    a unique and immutable primitive value and may be used as the key of an Object property
+- Objects (collections of properties)
+
 ### What are the possible ways to create objects in JavaScript?
+
 ### What is undefined property?
+A variable that has not been assigned a value has the value undefined.
+
 ### What is null value?
+has exactly one value: null
+represents the intentional absence of any object value
+
 ### What is the difference between null and undefined?
 ### What is the difference between window and document?
 ### What is isNaN?
+
 ### What is the difference between let, const and var?
 ### What are the differences between undeclared and undefined variables?
 ### What are global variables?
 ### What are the problems with global variables?
 ### What is NaN property?
+NaN - a value representing Not-A-Number, typically encountered when the result of an arithmetic operation cannot be expressed as a number
+- If NaN is involved in any mathematical operation, the result is also NaN.
+- When NaN is one of the operands of any relational comparison (>, <, >=, <=), the result is always false.
+- NaN compares unequal (via ==, !=, ===, and !==) to any other value — including to another NaN value.
+- NaN is also one of the falsy values in JavaScript.
+
 ### What are classes in ES6?
 ### How do you check whether a string contains a substring?
 ### How do you check if a key exists in an object?
