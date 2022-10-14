@@ -93,13 +93,12 @@ LOW - 7 questions (~9%)
 | 7.14 | [How do you decode an URL?](https://github.com/szkertesz/crack-ti/blob/main/questions/js.md#how-do-you-decode-an-url)                                                    | MEDIUM   |
 | 7.15 | [What is nodejs?](https://github.com/szkertesz/crack-ti/blob/main/questions/js.md#what-is-nodejs)                                                              | HIGH     |
 
-
 ## Data Types
 
 ### What are primitive data types?
 - Primitive values (immutable values)
     - **Boolean** type
-    [represents a logical entity and can have two values: true and false]
+    [represents a logical entity and can have two values: `true` and `false`]
     - **Null** type
     - **Undefined** type
     - **Number** type
@@ -108,18 +107,51 @@ LOW - 7 questions (~9%)
     [is used to represent textual data]
     - **Symbol** type
     [a unique and immutable primitive value and may be used as the key of an Object property]
-- Objects (collections of properties)
+- Objects (collections of properties, a property is an association between a name (or key) and a value)
 
 ### What are the possible ways to create objects in JavaScript?
 
+- with `new` keyword
+    ```javascript
+    const myCar = new Object();
+    myCar.make = 'Ford';
+    myCar.model = 'Mustang';
+    myCar.year = 1969;
+    ```
+- using an object initializer
+    ```javascript
+    const myCar = {
+        make: 'Ford',
+        model: 'Mustang',
+        year: 1969
+    };
+    ```
 ### What is undefined property?
 A variable that has not been assigned a value has the value undefined.
 
 ### What is null value?
-has exactly one value: null
-represents the intentional absence of any object value
+
+- is one of JavaScript's primitive values and is treated as falsy for boolean operations
+- has exactly one value: null
+- represents the intentional absence of any object value
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/null
 
 ### What is the difference between null and undefined?
+(beware of the differences between equality (==) and identity (===) operators)
+```javascript
+typeof null          // "object" (not "null" for legacy reasons)
+typeof undefined     // "undefined"
+null === undefined   // false
+null  == undefined   // true
+null === null        // true
+null  == null        // true
+!null                // true
+isNaN(1 + null)      // false
+isNaN(1 + undefined) // true
+```
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/null#difference_between_null_and_undefined
+
 ### What is the difference between window and document?
 ### What is isNaN?
 
@@ -201,6 +233,11 @@ NaN - a value representing Not-A-Number, typically encountered when the result o
 ## Common 
 
 ### What is a strict mode in javascript?
+- is a way to opt in to a restricted variant of JavaScript
+- has different semantics from normal code
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+
 ### What are PWAs?
 ### How do you validate an email in javascript?
 ### How do you get the current url with javascript?
