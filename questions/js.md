@@ -98,16 +98,16 @@ LOW - 7 questions (~9%)
 
 ### What are primitive data types?
 - Primitive values (immutable values)
-    - Boolean type
-    Boolean represents a logical entity and can have two values: true and false.
-    - Null type
-    - Undefined type
-    - Number type
-    - BigInt type
-    - String type
-    String type is used to represent textual data
-    - Symbol type
-    a unique and immutable primitive value and may be used as the key of an Object property
+    - **Boolean** type
+    [represents a logical entity and can have two values: true and false]
+    - **Null** type
+    - **Undefined** type
+    - **Number** type
+    - **BigInt** type
+    - **String** type
+    [is used to represent textual data]
+    - **Symbol** type
+    [a unique and immutable primitive value and may be used as the key of an Object property]
 - Objects (collections of properties)
 
 ### What are the possible ways to create objects in JavaScript?
