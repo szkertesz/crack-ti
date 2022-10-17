@@ -171,14 +171,14 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/null
 
 
     `window` is the execution context and global object for that context's JavaScript.
-    
+
     Each browser tab has its own top-level `window` object.
 
     Each `<iframe>` element has its own `window` object too, nested within a parent window.
 
     Each of these windows gets its own separate global object. `window.parent` and `window.top` might refer to enclosing windows, giving access to other execution contexts.
 
-    `window` properties include: `setTimeout()`, `setInterval()` -- binding event handlers to a timer; `location` -- giving the current URL; `history` (w/ back(), `forward()` methods), `navigator`.
+    `window` properties include: `setTimeout()`, `setInterval()` -- binding event handlers to a timer; `location` -- giving the current URL; `history` (w/ back(), `forward()` methods); `navigator`.
 
     https://stackoverflow.com/questions/9895202/what-is-the-difference-between-window-screen-and-document-in-javascript#answer-41927247
 
