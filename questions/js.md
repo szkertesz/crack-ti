@@ -127,7 +127,8 @@ LOW - 7 questions (~9%)
     };
     ```
 ### What is undefined property?
-A variable that has not been assigned a value has the value undefined.
+- A variable that has not been assigned a value
+- has the value undefined.
 
 ### What is null value?
 
@@ -153,6 +154,43 @@ isNaN(1 + undefined) // true
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/null#difference_between_null_and_undefined
 
 ### What is the difference between window and document?
+
+- **window**
+
+    The `Window` interface represents a window containing a DOM document; the `document` property points to the DOM document loaded in that window.
+
+    `document.defaultView` returns the window object associated with a document, or `null` if none is available
+
+    `window.document` returns a reference to the document contained in the window
+
+    A global variable, `window`, representing the window in which the script is running, is exposed to JavaScript code.
+
+    In a tabbed browser, each tab is represented by its own `Window` object; the global `window` seen by JavaScript code running within a given tab always represents the tab in which the code is running.
+
+    https://developer.mozilla.org/en-US/docs/Web/API/Window
+
+
+    `window` is the execution context and global object for that context's JavaScript.
+    
+    Each browser tab has its own top-level `window` object.
+
+    Each `<iframe>` element has its own `window` object too, nested within a parent window.
+
+    Each of these windows gets its own separate global object. `window.parent` and `window.top` might refer to enclosing windows, giving access to other execution contexts.
+
+    `window` properties include: `setTimeout()`, `setInterval()` -- binding event handlers to a timer; `location` -- giving the current URL; `history` (w/ back(), `forward()` methods), `navigator`.
+
+    https://stackoverflow.com/questions/9895202/what-is-the-difference-between-window-screen-and-document-in-javascript#answer-41927247
+
+- **document**
+
+    The `Document` interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.
+
+    It provides functionality globally to the document, like how to obtain the page's URL and create new elements in the document.
+
+    The `Document` interface describes the common properties (`Document.contentType`,`Document.fonts`, `Document.links`, `Document.activeELement`, `Document.body`, `Document.children`, ), methods (`Document.createElement()`, `Document.createEvent()`, `Document.getElementById()`, `Document.querySelector()`) and events (`scroll`, `animationend`, `drag`, `keydown`, `readystatechange`, `touchstart`, `pointerenter`) for any kind of document. Depending on the document's type (e.g. HTML, XML, SVG, …), a larger API is available: HTML documents, served with the `"text/html"` content type, also implement the `HTMLDocument` interface (`Document.location`, `Document.Title`, `Document.ReadyState`), whereas XML and SVG documents implement the `XMLDocument` interface.
+
+
 ### What is isNaN?
 
 ### What is the difference between let, const and var?
