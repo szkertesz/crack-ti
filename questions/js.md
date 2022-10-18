@@ -325,8 +325,16 @@ temporal dead zone apply to both `let` and `const`
     ```
 
 ### What are global variables?
-When you declare a variable outside of any function, it is called a *global variable*, because it is available to any other code in the current document. When you declare a variable within a function, it is called a -, because it is available only within that function.
+When you declare a variable outside of any function, it is called a *global variable*, because it is available to any other code in the current document. When you declare a variable within a function, it is called a *local variable*, because it is available only within that function.
+(the global scope is the scope that contains, and is visible in all other scopes)
+
 ### What are the problems with global variables?
+- **Variable naming collisions** - If you're working on a team and both yourself and your co-worker use the same variable name on the global scope, the variable defined last will overwrite the initial variable.
+
+- **Security** - Specifically on the web, every user has access to the Window (or global) object. By putting variables on the global scope, you give any user the ability to see or change your variables.
+
+3) **Performance** - This is almost negligible, but it still exists. The way JavaScript variable lookups work is the JavaScript engine will do a lookup on the current scope the variable is being looked up in. If it can't find it, it will do a look up on the next parent scope. If it doesn't find it there, it will continue looking upward until it reaches the global object looking for that variable. If all of your variables are located on the global scope, the JavaScript engine will always have to go through every scope in order to finally reach the global scope to find the variable.
+
 ### What is NaN property?
 NaN - a value representing Not-A-Number, typically encountered when the result of an arithmetic operation cannot be expressed as a number
 - If NaN is involved in any mathematical operation, the result is also NaN.
@@ -335,10 +343,102 @@ NaN - a value representing Not-A-Number, typically encountered when the result o
 - NaN is also one of the falsy values in JavaScript.
 
 ### What are classes in ES6?
+Classes are a template for creating objects. They encapsulate data with code to work on that data.
+
+the class syntax has two components: class expressions and class declarations
+
+- **class declaration**
+
+     One way to define a class, using the `class` keyword with the name of the class
+
+     classes must be defined before they can be constructed
+
+     ```javascript
+    const p = new Rectangle(); // ReferenceError
+
+    class Rectangle {}
+     ```
+
+- **class expression**
+    another way to define a class. Class expressions can be named or unnamed
+    ```javascript
+    // unnamed
+    let Rectangle = class {
+        constructor(height, width) {
+            this.height = height;
+            this.width = width;
+        }
+    };
+    ```
+    ```javascript
+    // named
+    Rectangle = class Rectangle2 {
+        constructor(height, width) {
+            this.height = height;
+            this.width = width;
+        }
+    };
+    ```
+
+    The body of a class is the part that is in curly brackets `{}` in which you define class members, such as methods or constructor
+
 ### How do you check whether a string contains a substring?
+
+```javascript
+includes(searchString)
+includes(searchString, position) // optional - the position within the string at which to begin searching for searchString. (Defaults to 0.)
+```
+
+```javascript
+const sentence = 'The quick brown fox jumps over the lazy dog.';
+
+const word = 'fox';
+
+console.log(`The word "${word}" ${sentence.includes(word) ? 'is' : 'is not'} in the sentence`);
+// expected output: "The word "fox" is in the sentence"
+```
+
 ### How do you check if a key exists in an object?
+```javascript
+const example = {
+    prop: 'exists'
+};
+
+example.hasOwnProperty('prop'); // returns true if the specified property is a direct (not inherited) property of the object (does not check in the object's prototype chain)
+'prop' in example; //  returns true if the specified property is in the specified object or its prototype chain
+
+example.prop !== undefined
+example['prop'] !== undefined
+```
+
+
 ### How do you copy properties from one object to other?
+
+```javascript
+Object.assign(target, ...sources)
+```
+
+```javascript
+const target = { a: 1, b: 2 };
+const source = { b: 4, c: 5 };
+
+const returnedTarget = Object.assign(target, source);
+
+console.log(target); // Object { a: 1, b: 4, c: 5 }
+console.log(returnedTarget === target); // true
+
+const target2 = {...target, ...source}
+console.log(target2); // Object { a: 1, b: 4, c: 5 }
+
+for (let key in source) {
+    target[key] = source[key]
+}
+```
+
 ### What is a proxy object?
+
+
+
 ### What is the main difference between Object.values and Object.entries method?
 ### How can you get the list of keys of any object?
 ### How do you create an object with prototype?
