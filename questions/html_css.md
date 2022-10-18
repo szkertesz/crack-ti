@@ -54,6 +54,13 @@ LOW - 9 questions (22.5%)
 
 ### What is Critical Rendering Path?
 ### What is the DOM? How does the DOM work?
+
+The **Document Object Model (DOM)** is the *data representation of the objects* that comprise the structure and content of a document on the web.
+
+The DOM is a *programming interface for web documents*. It *represents the page / document* *as nodes and objects* (it's an object-oriented representation) so that, programming languages (like JavaScript) can interact with the page / they can manipulate it.
+
+https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction
+
 ### Explain the difference between layout, painting and compositing?
 ### What are the Benefits of Server Side Rendering (SSR) Over Client Side Rendering (CSR)?
 ### How can I get indexed better by search engines?

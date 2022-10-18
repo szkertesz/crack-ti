@@ -178,7 +178,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/null
 
     Each of these windows gets its own separate global object. `window.parent` and `window.top` might refer to enclosing windows, giving access to other execution contexts.
 
-    `window` properties include: `setTimeout()`, `setInterval()` -- binding event handlers to a timer; `location` -- giving the current URL; `history` (w/ back(), `forward()` methods); `navigator`.
+    `window` properties include: `setTimeout()`, `setInterval()` -- binding event handlers to a timer; `location` -- giving the current URL; `history` (w/ `back()`, `forward()` methods); `navigator`, etc.
 
     https://stackoverflow.com/questions/9895202/what-is-the-difference-between-window-screen-and-document-in-javascript#answer-41927247
 
@@ -188,14 +188,144 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/null
 
     It provides functionality globally to the document, like how to obtain the page's URL and create new elements in the document.
 
-    The `Document` interface describes the common properties (`Document.contentType`,`Document.fonts`, `Document.links`, `Document.activeELement`, `Document.body`, `Document.children`, ), methods (`Document.createElement()`, `Document.createEvent()`, `Document.getElementById()`, `Document.querySelector()`) and events (`scroll`, `animationend`, `drag`, `keydown`, `readystatechange`, `touchstart`, `pointerenter`) for any kind of document. Depending on the document's type (e.g. HTML, XML, SVG, …), a larger API is available: HTML documents, served with the `"text/html"` content type, also implement the `HTMLDocument` interface (`Document.location`, `Document.Title`, `Document.ReadyState`), whereas XML and SVG documents implement the `XMLDocument` interface.
+    The `Document` interface describes the common
+    
+    properties (`Document.contentType`, `Document.fonts`, `Document.links`, `Document.activeELement`, `Document.body`, `Document.children`),
+
+    methods (`Document.createElement()`, `Document.createEvent()`, `Document.getElementById()`, `Document.querySelector()`) and
+
+    events (`scroll`, `animationend`, `drag`, `keydown`, `readystatechange`, `touchstart`, `pointerenter`) for any kind of document.
+
+    Depending on the document's type (e.g. HTML, XML, SVG, …), a larger API is available: HTML documents, served with the `"text/html"` content type, also implement the `HTMLDocument` interface (w/ eg. `Document.location`, `Document.Title`, `Document.ReadyState`), whereas XML and SVG documents implement the `XMLDocument` interface.
 
 
 ### What is isNaN?
 
+The `isNaN()` function determines whether a value is `NaN` or not.
+
+(it is not possible to use the equality operators (== and ===) to compare a value against `NaN` to determine whether the value is `NaN` or not, because both `NaN == NaN` and `NaN === NaN` evaluate to `false`)
+The `isNaN()` function provides equality check against NaN.
+
+If `isNaN(x)` returns `false`, you can use `x` in an arithmetic expression not making the expression return `NaN`.
+
+```javascript
+isNaN(NaN);       // true
+isNaN(undefined); // true
+isNaN({});        // true
+
+isNaN(true);      // false
+isNaN(null);      // false
+isNaN(37);        // false
+
+// strings
+isNaN('37');      // false: "37" is converted to the number 37 which is not NaN
+isNaN("37,5");    // true
+isNaN('blabla');   // true: "blabla" is converted to a number. Parsing this as a number fails and returns NaN
+isNaN('123ABC');  // true:  parseInt("123ABC") is 123 but Number("123ABC") is NaN
+isNaN('');        // false: the empty string is converted to 0 which is not NaN
+isNaN(' ');       // false: a string with spaces is converted to 0 which is not NaN
+
+// dates
+isNaN(new Date());                // false
+isNaN(new Date().toString());     // true
+```
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/isNaN
+
 ### What is the difference between let, const and var?
+
+`let`, `const` & `var` are variable declarations
+
+`let` and `const` declarations are scoped to the block statement that they are declared in. variables created with `var` are not block-scoped, but only local to the function (or global scope) that the block resides within
+
+temporal dead zone apply to both `let` and `const`
+
+- **let**
+
+    The `let` declaration declares a block-scoped local variable
+
+    allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, unlike the `var` keyword, which declares a variable globally, or locally to an entire function.
+    
+    The other difference between `var` and `let` is that the latter is initialized to a value only when a parser evaluates it
+
+    A `let` or `const` variable is said to be in a *"temporal dead zone" (TDZ)* from the start of the block until code execution reaches the line where *the variable is declared and initialized with a value*.
+    This differs from `var` variables, which will return a value of `undefined` if they are accessed before they are declared.
+    ```javascript
+    { // TDZ starts at beginning of scope
+    console.log(bar); // undefined
+    console.log(foo); // ReferenceError
+    var bar = 1;
+    let foo = 2; // End of TDZ (for foo)
+    }
+    ```
+
+    Just like `const` the `let` does not create properties of the `window` object when declared globally (in the top-most scope):
+    ```javascript
+        var x = 'global';
+        let y = 'global';
+        console.log(this.x); // "global"
+        console.log(this.y); // undefined
+    ```
+    Many issues with `let` variables can be avoided by declaring them at the top of the scope in which they are used
+
+    Redeclaring the same variable within the same function or block scope raises a `SyntaxError`.
+    ```javascript
+        if (x) {
+        let foo;
+        let foo; // SyntaxError thrown.
+        }
+    ```
+
+- **const**
+
+    Constants are block-scoped, like `let` variable declarations. The value of a `const` can't be changed through reassignment (i.e. by using the assignment operator `=`), and it can't be redeclared, creates a read-only reference to a value. However, if a constant is an object or array its properties or items can be updated or removed.
+
+    An initializer for a constant is required. You must specify its value in the same declaration.
+
+    Global constants do not become properties of the `window` object, unlike `var` variables.
+
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
+
+- **var**
+
+    `var` declarations, wherever they occur, are processed before any code is executed. This is called hoisting. It's initial value is `undefined`.
+
+    Only a variable's declaration is hoisted, not its initialization. The initialization happens only when the assignment statement is reached. Until then the variable remains undefined (but declared):
+
+    ```javascript
+    'use strict';
+
+    function do_something() {
+        console.log(bar); // undefined (note: not ReferenceError)
+        var bar = 111; // the initialization w/ the assignment statement
+        console.log(bar); // 111
+    }
+
+    // the code above is interpreted as:
+    function do_something() {
+        var bar; // the declaration happened and it is hoisted
+        console.log(bar);
+        bar = 111;
+        console.log(bar);
+    }
+    ```
+
+    The scope of a variable declared with `var` is its current execution context and closures thereof, which is either the enclosing function and functions declared within it, or, for variables declared outside any function, global.
+
 ### What are the differences between undeclared and undefined variables?
+
+- **Undefined**: when a variable has been declared but has not been assigned with any value.
+    ```javascript
+    var a;
+    console.log(a)  // undefined
+    ```
+
+- **Undeclared**: when we try to access any variable that is not initialized or declared earlier using `let`, `const` or `var` keyword.
+    ```javascript
+    console.log(myVariable) //ReferenceError: myVariable is not defined
+    ```
+
 ### What are global variables?
+When you declare a variable outside of any function, it is called a *global variable*, because it is available to any other code in the current document. When you declare a variable within a function, it is called a -, because it is available only within that function.
 ### What are the problems with global variables?
 ### What is NaN property?
 NaN - a value representing Not-A-Number, typically encountered when the result of an arithmetic operation cannot be expressed as a number
