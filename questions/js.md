@@ -437,21 +437,83 @@ for (let key in source) {
 
 ### What is a proxy object?
 
-
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 
 ### What is the main difference between Object.values and Object.entries method?
+
+`Object.values()` method returns an array of a given object's own enumerable property values
+
+`Object.entries()` method returns an array of a given object's own enumerable string-keyed property [key, value] pairs.
+
+```javascript
+const object1 = {
+  a: 'somestring',
+  b: 42,
+  c: false
+};
+
+console.log(Object.values(object1)); // Array ["somestring", 42, false]
+
+console.log(Object.entries(object1)); // [ ['a', 'somestring'], ['b', 42], ['c', false] ]
+```
+
 ### How can you get the list of keys of any object?
+
+```javascript
+Object.keys(obj) // returns an array of a given object's own enumerable property names
+```
+
+```javascript
+const object1 = {
+  a: 'somestring',
+  b: 42,
+  c: false
+};
+
+console.log(Object.keys(object1)); // Array ["a", "b", "c"]
+```
+
 ### How do you create an object with prototype?
+The `Object.create()` method creates a new object, using an existing object as the prototype of the newly created object.
+
+```javascript
+const person = {
+  isHuman: false,
+  printIntroduction: function() {
+    console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+  }
+};
+
+const me = Object.create(person);
+
+me.name = 'Matthew'; // "name" is a property set on "me", but not on "person"
+me.isHuman = true; // inherited properties can be overwritten
+
+me.printIntroduction(); // "My name is Matthew. Am I human? true"
+```
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
 ### What is a WeakSet?
+
 ### What are the differences between WeakSet and Set?
+
 ### What is a WeakMap?
+
 ### What are the differences between WeakMap and Map?
+
 ### What is Hoisting?
+
 ### How do you assign default values to variables?
+
 ### Context, Scope proto and Prototype 
+
 ### What is the difference between Call, Apply and Bind?
+
 ### What is scope in javascript?
+
 ### What is the difference between proto and prototype?
+
 ### What is prototype chain?
 
 ## JSON 
