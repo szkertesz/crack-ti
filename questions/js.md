@@ -626,7 +626,70 @@ https://developer.mozilla.org/en-US/docs/Glossary/Hoisting
 
 ### How do you assign default values to variables?
 
-### Context, Scope proto and Prototype 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator#assigning_a_default_value_to_a_variable
+
+```javascript
+const myText = ''; // An empty string (which is also a falsy value)
+
+const notFalsyText = myText || 'Hello world';
+console.log(notFalsyText); // Hello world
+
+const preservingFalsy = myText ?? 'Hi neighborhood';
+console.log(preservingFalsy); // '' (as myText is neither undefined nor null)
+```
+
+```javascript
+let isHappyHour = '🍺';
+
+// Logical Operator
+isHappyHour = isHappyHour || '🍵'; // '🍺'
+// ! any falsy value will not be used. If you only need to filter out null or undefined, consider using the nullish coalescing operator.
+
+// Ternary
+isHappyHour = isHappyHour ? isHappyHour : '🍵'; // '🍺'
+
+// If/Else
+if (isHappyHour) { 
+  isHappyHour = isHappyHour 
+} else { 
+  isHappyHour = '🍵' 
+}
+```
+
+### Context, Scope proto and Prototype
+
+- Global context
+
+    outside of any function (this refers to the global object whether in strict mode or not)
+
+- Function context
+
+    inside a function
+
+**Execution Context**
+
+- **Global Execution Context (GEC)**
+    Execution Context => Execution Context Object (ECO)
+    1. Creation phase of EC
+       1. Creation of the Variable Object (VO)
+          1. for each variable declared with the `var` keyword, a property is added to VO that points to that variable and is set to 'undefined'. = **Hoisting**
+          2. every function declaration, a property is added to the VO, pointing to that function, and that property is stored in memory
+       2. Creation of the Scope Chain
+
+            a mechanism that determines how accessible a piece of code is to other parts of the codebase
+
+            When a function is defined in another function, the inner function has access to the code defined in that of the outer function, and that of its parents. This behavior is called **lexical scoping**.
+
+            However, the outer function does not have access to the code within the inner function.
+
+       3. Setting the value of the `this` keyword
+    2. Execution phase
+
+- **Function Execution Context (GEC)**
+    1. Creation phase
+       1. Creation of 'argument' object an array-like object, which includes all of the arguments supplied to the function
+       2. Scoping
+        Each Function Execution Context creates its scope
 
 ### What is the difference between Call, Apply and Bind?
 
