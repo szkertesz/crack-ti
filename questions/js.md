@@ -251,28 +251,28 @@ temporal dead zone apply to both `let` and `const`
     This differs from `var` variables, which will return a value of `undefined` if they are accessed before they are declared.
     ```javascript
     { // TDZ starts at beginning of scope
-    console.log(bar); // undefined
-    console.log(foo); // ReferenceError
-    var bar = 1;
-    let foo = 2; // End of TDZ (for foo)
+      console.log(bar); // undefined
+      console.log(foo); // ReferenceError
+      var bar = 1;
+      let foo = 2; // End of TDZ (for foo)
     }
     ```
 
     Just like `const` the `let` does not create properties of the `window` object when declared globally (in the top-most scope):
     ```javascript
-        var x = 'global';
-        let y = 'global';
-        console.log(this.x); // "global"
-        console.log(this.y); // undefined
+    var x = 'global';
+    let y = 'global';
+    console.log(this.x); // "global"
+    console.log(this.y); // undefined
     ```
     Many issues with `let` variables can be avoided by declaring them at the top of the scope in which they are used
 
     Redeclaring the same variable within the same function or block scope raises a `SyntaxError`.
     ```javascript
-        if (x) {
-        let foo;
-        let foo; // SyntaxError thrown.
-        }
+    if (x) {
+      let foo;
+      let foo; // SyntaxError thrown.
+    }
     ```
 
 - **const**
@@ -394,8 +394,7 @@ const sentence = 'The quick brown fox jumps over the lazy dog.';
 
 const word = 'fox';
 
-console.log(`The word "${word}" ${sentence.includes(word) ? 'is' : 'is not'} in the sentence`);
-// expected output: "The word "fox" is in the sentence"
+console.log(`The word "${word}" ${sentence.includes(word) ? 'is' : 'is not'} in the sentence`); // "The word "fox" is in the sentence"
 ```
 
 ### How do you check if a key exists in an object?
@@ -405,7 +404,7 @@ const example = {
 };
 
 example.hasOwnProperty('prop'); // returns true if the specified property is a direct (not inherited) property of the object (does not check in the object's prototype chain)
-'prop' in example; //  returns true if the specified property is in the specified object or its prototype chain
+'prop' in example; // returns true if the specified property is in the specified object or its prototype chain
 
 example.prop !== undefined
 example['prop'] !== undefined
@@ -496,9 +495,76 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
 ### What is a WeakSet?
 
+`WeakSet` objects are collections of objects (only!). Just as with Sets, each object in a `WeakSet` may occur only once; all objects in a `WeakSet`'s collection are unique.
+
+```javascript
+const ws = new WeakSet();
+const foo = {};
+const bar = {};
+
+ws.add(foo);
+ws.add(bar);
+
+ws.has(foo);    // true
+ws.has(bar);    // true
+
+ws.delete(foo); // removes foo from the set
+ws.has(foo);    // false, foo has been removed
+ws.has(bar);    // true, bar is retained
+```
+
 ### What are the differences between WeakSet and Set?
 
+`Set` objects are collections of values. You can iterate through the elements of a set in insertion order. A value in the `Set` may only occur once; it is unique in the `Set`'s collection.
+
+a `Set` is like an array that can only contain unique values but we can still iterate through it like an array using methods like for loops and `.forEach`.
+
+Similar to a `Set`, `WeakSet` is a collection of objects that are unique from each other but differs because `WeakSet` can only store objects and cannot contain arbitrary values of any type like strings or numbers.
+
+`WeakSet`s use weak references
+
+`WeakSet` is not enumerable. This means there is no way to loop over the items contained within it because there is no list of current objects stored in the collection
+
+
+    If you need to store additional data temporarily and don’t want to worry about cleaning up the memory or how the objects are removed, then use weak references
+
+https://blog.logrocket.com/weakmap-weakset-understanding-javascript-weak-references/
+
 ### What is a WeakMap?
+
+The `Map` object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and primitive values) may be used as either a key or a value.
+
+`Map` is like an object where we can store key-value pairs and access the values contained within the `Map` through the key. Unlike a standard object in JavaScript, we must use the `.get()` method to access the values.
+
+In comparison to a `Map`, a `WeakMap` is very much the same but the references it holds are weak references, meaning it won’t prevent garbage collection from removing values it references if they are not strongly referenced elsewhere.
+
+`WeakMap` is not enumerable due to the weak references.
+
+we must use objects as the keys, but the values can be any arbitrary value like a string or number.
+
+```javascript
+const wm1 = new WeakMap();
+const wm2 = new WeakMap();
+
+const obj1 = {};
+const obj2 = window;
+
+wm1.set(obj1, 100);
+wm1.set(obj2, 'Hello');
+wm2.set(obj1, obj2); // You can set the value to be anything including an object or function
+wm2.set(obj2, undefined); // Or, undefined
+wm1.set(wm2, wm1); // Or, even a WeakMap itself
+
+wm1.get(obj1); // 100
+
+wm1.has(obj1); // true
+wm1.delete(obj1);
+wm1.has(obj1); // false
+```
+
+    If you need to store additional data temporarily and don’t want to worry about cleaning up the memory or how the objects are removed, then use weak references
+
+https://blog.logrocket.com/weakmap-weakset-understanding-javascript-weak-references/
 
 ### What are the differences between WeakMap and Map?
 
