@@ -568,7 +568,61 @@ https://blog.logrocket.com/weakmap-weakset-understanding-javascript-weak-referen
 
 ### What are the differences between WeakMap and Map?
 
+- In comparison to a `Map`, a `WeakMap` is very much the same but the references it holds are weak references
+
+- `WeakMap` is not enumerable due to the weak references.
+
+- we must use objects as the keys
+
 ### What is Hoisting?
+JavaScript Hoisting refers to the process whereby the interpreter appears to move the declaration of functions, variables or classes to the top of their scope, prior to execution of the code.
+
+Hoisting allows functions to be safely used in code before they are declared.
+
+Variable and class declarations are also hoisted, so they too can be referenced / used before they are declared.
+
+- function hoisting
+  ```javascript
+  catName("Tiger");
+
+  function catName(name) {
+      console.log(`My cat's name is ${name}`);
+  }
+  ```
+
+- variable hoisting
+
+    JavaScript only hoists declarations, not initializations
+
+    - `var` hoisting
+
+        ```javascript
+        console.log(num); // Default initialization: returns 'undefined' from hoisted var declaration (not 6)
+        var num; // Declaration
+        num = 6; // Initialization
+        console.log(num); // Returns 6 after the line with initialization is executed.
+        ```
+
+    - `let` and `const` hoisting
+
+        Variables declared with `let` and `const` are also hoisted but, unlike `var`, are not initialized with a default value.
+
+        ```javascript
+        console.log(num); // Throws ReferenceError exception as the variable value is uninitialized
+        let num = 6; // Initialization
+        ```
+
+    - `class` hoisting (declarations only!)
+
+        while functions can be called in code that appears before they are defined, class declarations must be defined before they can be constructed
+
+        ```javascript
+        const p = new Rectangle(); // ReferenceError
+
+        class Rectangle {}
+        ```
+
+https://developer.mozilla.org/en-US/docs/Glossary/Hoisting
 
 ### How do you assign default values to variables?
 
