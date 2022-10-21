@@ -674,6 +674,7 @@ if (isHappyHour) {
        1. Creation of the Variable Object (VO)
           1. for each variable declared with the `var` keyword, a property is added to VO that points to that variable and is set to 'undefined'. = **Hoisting**
           2. every function declaration, a property is added to the VO, pointing to that function, and that property is stored in memory
+
        2. Creation of the Scope Chain
 
             a mechanism that determines how accessible a piece of code is to other parts of the codebase
@@ -683,19 +684,129 @@ if (isHappyHour) {
             However, the outer function does not have access to the code within the inner function.
 
        3. Setting the value of the `this` keyword
+
+            - In the GEC (outside of any function and object), this refers to the global object — which is the window object.
+
+            - In objects, the `this` keyword doesn't point to the GEC, but to the object itself.
+
     2. Execution phase
 
-- **Function Execution Context (GEC)**
+        Up until this point, the VO contained variables with the values of `undefined`.
+
+        JavaScript engine reads the code in the current Execution Context [EC] once more, then *updates the VO with the actual values of* these *variables*
+
+        The **Execution Stack**, also known as the **Call Stack**, keeps track of all the ECs created
+
+        JavaScript is a single-threaded language => when other actions, functions, and events occur, an EC is created for each of these events ~ `Execution Stack`
+
+        1. When scripts load in the browser, the `Global Context` is created as the *default context* and is placed at the bottom of the execution stack.
+
+        2. The JS engine then searches for function calls in the code. For each function call, a new FEC is created for that function and is placed on top of the currently executing EC.
+
+            The EC at the top of the Execution stack becomes the **active Execution Context**, and will always get executed first by the JS engine.
+
+        3. As soon as the execution of all the code within the active EC is done, the JS engine pops out that particular function's EC of the execution stack, moves towards the next below it, and so on.
+
+- **Function Execution Context (FEC)**
+
     1. Creation phase
-       1. Creation of 'argument' object an array-like object, which includes all of the arguments supplied to the function
+
+       1. Creation of 'argument' object
+
+            an array-like object, which includes all of the arguments supplied to the function
+
        2. Scoping
-        Each Function Execution Context creates its scope
+
+            Each FEC creates its scope
+
+       3. Setting the value of the `this` keyword
+
+            FEC doesn't create the `this` object. Rather, it get's access to that of the environment it is defined in. Eg. if it's defined in the GEC, it points to the `window` object.
+
+| GLOBAL EXECUTION CONTEXT | FUNCTION EXECUTION CONTEXT |
+|---|---|
+| Creates a Global Variable object that stores function and variables declarations. | Doesn't create a Global Variable object. Rather, it creates an argument object that stores all the arguments passed to the function. |
+| Creates the `this` object that stores all the variables and functions in the Global scope as methods and properties.| Doesn't create the `this` object, but has access to that of the environment in which it is defined. Usually the `window` object. |
+| Can't access the code of the Function contexts defined in it | Due to scoping, has access to the code(variables and functions) in the context it is defined and that of its parents |
+| Sets up memory space for variables and functions defined globally | Sets up memory space only for variables and functions defined within the function.|
 
 ### What is the difference between Call, Apply and Bind?
 
+- `call` invokes the function and allows you to pass in arguments one by one
+
+    ```javascript
+    var person1 = {firstName: 'Jon', lastName: 'Kuperman'};
+    var person2 = {firstName: 'Kelly', lastName: 'King'};
+
+    function say(greeting) {
+        console.log(greeting + ' ' + this.firstName + ' ' + this.lastName);
+    }
+
+    say.call(person1, 'Hello'); // Hello Jon Kuperman
+    say.call(person2, 'Hello'); // Hello Kelly King
+    ```
+
+- `apply` invokes the function and allows you to pass in arguments as an array.
+
+    ```javascript
+    var person1 = {firstName: 'Jon', lastName: 'Kuperman'};
+    var person2 = {firstName: 'Kelly', lastName: 'King'};
+
+    function say(greeting) {
+        console.log(greeting + ' ' + this.firstName + ' ' + this.lastName);
+    }
+
+    say.apply(person1, ['Hello']); // Hello Jon Kuperman
+    say.apply(person2, ['Hello']); // Hello Kelly King
+    ```
+
+- `bind` returns a new function, allowing you to pass in a `this` array and any number of arguments.
+    ```js
+    var person1 = {firstName: 'Jon', lastName: 'Kuperman'};
+    var person2 = {firstName: 'Kelly', lastName: 'King'};
+
+    function say() {
+        console.log('Hello ' + this.firstName + ' ' + this.lastName);
+    }
+
+    var sayHelloJon = say.bind(person1);
+    var sayHelloKelly = say.bind(person2);
+
+    sayHelloJon(); // Hello Jon Kuperman
+    sayHelloKelly(); // Hello Kelly King
+    ```
+
+    more to `bind`: extract a method from an object, then later call that function and expect it to use the original object as its `this` <= create a bound function from the function, using the original object
+
+    ```javascript
+    this.x = 9; // 'this' refers to the global object (e.g. 'window') in non-strict mode
+    const module = {
+      x: 81,
+      getX() {
+          return this.x;
+      },
+    };
+
+    module.getX(); // returns 81
+
+    const retrieveX = module.getX;
+    retrieveX(); //  returns 9; the function gets invoked at the global scope
+
+    //  Create a new function with 'this' bound to module
+    const boundGetX = retrieveX.bind(module);
+    boundGetX(); //  returns 81
+    ```
+
 ### What is scope in javascript?
+A mechanism that determines how accessible a piece of code is to other parts of the codebase
+
+When a function is defined in another function, the inner function has access to the code defined in that of the outer function, and that of its parents. This behavior is called **lexical scoping**.
+
+However, the outer function does not have access to the code within the inner function.
 
 ### What is the difference between proto and prototype?
+
+
 
 ### What is prototype chain?
 
