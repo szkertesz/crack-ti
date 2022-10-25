@@ -1493,11 +1493,55 @@ To schedule a new microtask:
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
 
 ### What are PWAs?
+
+shorthand used initially by Google for the concept of creating a flexible, adaptable app using only web technologies, which is
+
+- *Discoverable*, so the contents can be found through search engines. <=  `Web app manifest`, which defines features of an app such as name, icon, splash screen, and theme colors in a JSON-formatted manifest file.
+- *Installable*, so it can be available on the device's home screen or app launcher. <= web app installation, service workers
+- *Linkable*, so you can share it by sending a URL.
+- *Network independent*, so it works offline or with a poor network connection. <= service workers, Cache API, Web Storage, IndexedDB
+- *Progressively enhanced*, so it's still usable on a basic level on older browsers, but fully-functional on the latest ones.
+- *Re-engageable*, so it's able to send notifications whenever there's new content available.
+- *Responsively designed*, so it's usable on any device with a screen and a browser—mobile phones, tablets, laptops, TVs, refrigerators, etc.
+- *Secure*, so the connections between the user, the app, and your server are secured against any third parties trying to get access to sensitive data.
 ### How do you validate an email in javascript?
+
 ### How do you get the current url with javascript?
+```js
+window.location.href
+```
 ### What is tree shaking?
+The removal of dead code.
+
+It relies on the `import` and `export` statements to detect if code modules are exported and imported for use between JavaScript files.
+In practice, we use module bundlers (e.g., webpack or Rollup) to automatically remove dead code when bundling multiple JavaScript files into single files.
+
 ### What is memoization?
+https://www.freecodecamp.org/news/memoization-in-javascript-and-react/
+
 ### What are modules?
+language-level module system appeared in the standard in 2015
+
+A module is just a file. One script is one module.
+
+- `export` keyword labels variables and functions that should be accessible from outside the current module.
+- `import` allows the import of functionality from other modules.
+```js
+// 📁 sayHi.js
+export function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+```
+…Then another file may import and use it:
+```js
+// 📁 main.js
+import {sayHi} from './sayHi.js';
+
+alert(sayHi); // function...
+sayHi('John'); // Hello, John!
+```
+we must tell the browser that a script should be treated as a module, by using the attribute `<script type="module">`
+
 ### Why do you need modules?
 ### How do you detect a mobile browser?
 ### How do you detect javascript disabled in the page?
