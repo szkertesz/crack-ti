@@ -1049,6 +1049,59 @@ arr.splice(-1, 0, 3, 4);
 alert( arr ); // 1,2,3,4,5
 ```
 ### What array methods do you know?
+
+https://javascript.info/array-methods#summary
+
+**To add/remove elements:**
+
+`push(...items)` – adds `items` to the end,
+
+`pop()` – extracts an item from the end,
+
+`shift()` – extracts an item from the beginning,
+
+`unshift(...items)` – adds `items` to the beginning.
+
+`splice(pos, deleteCount, ...items)` – at index `pos` deletes `deleteCount` elements and inserts `items`.
+
+`slice(start, end)` – creates a new array, copies elements from index `start` till `end` (not inclusive) into it.
+
+`concat(...items)` – returns a new array: copies all members of the current one and adds `items` to it. If any of `items` is an array, then its elements are taken.
+
+**To search among elements:**
+
+`indexOf/lastIndexOf(item, pos)` – look for `item` starting from position `pos`, return the index or -1 if not found.
+
+`includes(value)` – returns true if the array has `value`, otherwise false.
+
+`find/filter(func)` – filter elements through the `func`, return first/all values that make it return true.
+
+`findIndex` is like `find`, but returns the index instead of a value.
+
+**To iterate over elements:**
+
+`forEach(func)` – calls `func` for every element, does not return anything.
+
+**To transform the array:**
+
+`map(func)` – creates a new array from results of calling `func` for every element.
+
+`sort(func)` – sorts the array in-place, then returns it.
+
+`reverse()` – reverses the array in-place, then returns it.
+
+`split/join` – convert a string to array and back.
+
+`reduce(func, initial)` – calculate a single value over the array by calling `func` for each element and passing an intermediate result between the calls.
+
+**Additionally:**
+
+`Array.isArray(value)` checks value for being an array, if so returns true, otherwise false.
+
+    ! methods `sort`, `reverse` and `splice` modify the array itself.
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+
 - Static methods
   - `Array.from()` -- Creates a new Array instance from an array-like object or iterable object.
   - `Array.isArray()` -- Returns true if the argument is an array, or false otherwise.
