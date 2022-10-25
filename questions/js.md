@@ -806,49 +806,466 @@ However, the outer function does not have access to the code within the inner fu
 
 ### What is the difference between proto and prototype?
 
-
+https://stackoverflow.com/questions/9959727/proto-vs-prototype-in-javascript#answer-42002749
 
 ### What is prototype chain?
+
+Every object in JavaScript has a built-in property, which is called its *prototype*. The prototype is itself an object, so the prototype will have its own prototype, making what's called a prototype chain. The chain ends when we reach a prototype that has `null` for its own prototype.
+
+When you try to access a property of an object: if the property can't be found in the object itself (own property), the prototype is searched for the property. If the property still can't be found, then the prototype's prototype is searched, and so on until either the property is found, or the end of the chain is reached, in which case `undefined` is returned.
+
+```js
+const myObject = {
+  city: "Madrid",
+  greet() {
+    console.log(`Greetings from ${this.city}`);
+  },
+};
+
+myObject.greet(); // Greetings from Madrid
+```
+
+```js
+Object.getPrototypeOf(myObject); // Object { } => Object.prorotype
+```
+
+`Object.prototype` is the most basic prototype, that all objects have by default. The prototype of `Object.prototype` is `null`, so it's at the end of the prototype chain
+
+https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes
 
 ## JSON 
 
 ### What is JSON and its common operations?
+
+*JavaScript Object Notation (JSON)* is a standard text-based format for representing structured data based on JavaScript object syntax. It is commonly used for transmitting data in web applications.
+
+it can be used independently from JavaScript, and many programming environments feature the ability to read (parse) and generate JSON
+
+JSON exists as a string, it needs to be converted to a native JavaScript object to access the data
+
+We can also convert arrays to/from JSON.
+
+```js
+{
+  "browsers": {
+    "firefox": {
+      "name": "Firefox",
+      "pref_url": "about:config",
+      "releases": {
+        "1": {
+          "release_date": "2004-11-09",
+          "status": "retired",
+          "engine": "Gecko",
+          "engine_version": "1.7"
+        }
+      }
+    }
+  }
+}
+```
+
 ### How do you parse JSON string?
+You can use the `JSON.parse()` method to convert the above JSON string into a JavaScript object:
+```js
+const jsonText = `{
+  "browsers": {
+    "firefox": {
+      "name": "Firefox",
+      "pref_url": "about:config",
+      "releases": {
+        "1": {
+          "release_date": "2004-11-09",
+          "status": "retired",
+          "engine": "Gecko",
+          "engine_version": "1.7"
+        }
+      }
+    }
+  }
+}`;
+
+console.log(JSON.parse(jsonText));
+```
 ### Why do you need JSON?
 ### What is the purpose JSON stringify?
+The `JSON.stringify()` method converts a JavaScript value to a JSON string, optionally replacing values if a *replacer function* is specified or optionally including only the specified properties if a *replacer array* is specified.
+
+```js
+JSON.stringify(value)
+JSON.stringify(value, replacer)
+JSON.stringify(value, replacer, space)
+```
+
+```js
+JSON.stringify({}); // '{}'
+JSON.stringify(true); // 'true'
+JSON.stringify("foo"); // '"foo"'
+JSON.stringify([1, "false", false]); // '[1,"false",false]'
+JSON.stringify([NaN, null, Infinity]); // '[null,null,null]'
+JSON.stringify({ x: 5 }); // '{"x":5}'
+JSON.stringify(new Date(2006, 0, 2, 15, 4, 5)); // '"2006-01-02T15:04:05.000Z"'
+JSON.stringify({ x: 5, y: 6 }); // '{"x":5,"y":6}'
+```
+
+```js
+function replacer(key, value) {
+  // Filtering out properties
+  if (typeof value === "string") {
+    return undefined;
+  }
+  return value;
+}
+
+const foo = {
+  foundation: "Mozilla",
+  model: "box",
+  week: 45,
+  transport: "car",
+  month: 7,
+};
+JSON.stringify(foo, replacer);
+// '{"week":45,"month":7}'
+```
+
+```js
+const foo = {
+  foundation: "Mozilla",
+  model: "box",
+  week: 45,
+  transport: "car",
+  month: 7,
+};
+
+JSON.stringify(foo, ["week", "month"]);
+// '{"week":45,"month":7}', only keep "week" and "month" properties
+```
+space parameter
+```js
+console.log(JSON.stringify({ a: 2 }, null, " "));
+/*
+{
+ "a": 2
+}
+*/
+```
+/w localStorage
+```js
+// Creating an example of JSON
+const session = {
+  screens: [],
+  state: true,
+};
+session.screens.push({ name: "screenA", width: 450, height: 250 });
+session.screens.push({ name: "screenB", width: 650, height: 350 });
+session.screens.push({ name: "screenC", width: 750, height: 120 });
+
+// Converting the JSON string with JSON.stringify()
+// then saving with localStorage in the name of session
+localStorage.setItem("session", JSON.stringify(session));
+
+// Example of how to transform the String generated through
+// JSON.stringify() and saved in localStorage in JSON object again
+const restoredSession = JSON.parse(localStorage.getItem("session"));
+
+// Now restoredSession variable contains the object that was saved
+// in localStorage
+console.log(restoredSession);
+```
 ### How do you define JSON arrays?
+JSON Array is almost same as JavaScript Array. JSON array can store values of type `string`, `array`, `boolean`, `number`, `object`, or `null`. In JSON array, values are separated by commas. Array elements can be accessed using the [] operator.
 
 ## Array methods 
 
 ### What is the purpose of the array slice method?
 ### What is the purpose of the array splice method?
 ### What array methods do you know?
+- Static methods
+  - `Array.from()` -- Creates a new Array instance from an array-like object or iterable object.
+  - `Array.isArray()` -- Returns true if the argument is an array, or false otherwise.
+  - `Array.of()` -- Creates a new Array instance with a variable number of arguments, regardless of number or type of the arguments.
+
+- Instance methods
+  - `Array.prototype.at()` -- Returns the array item at the given index. Accepts negative integers, which count back from the last item.
+  - `Array.prototype.concat()` -- Returns a new array that is the calling array joined with other array(s) and/or value(s).
+  - `Array.prototype.entries()` -- Returns a new array iterator object that contains the key/value pairs for each index in an array
+  - `Array.prototype.every()` -- Returns true if every element in the calling array satisfies the testing function.
+  - `Array.prototype.filter()` -- Returns a new array containing all elements of the calling array for which the provided filtering function returns true.
+  - `Array.prototype.find()` -- Returns the value of the first element in the array that satisfies the provided testing function, or `undefined` if no appropriate element is found.
+  - `Array.prototype.findIndex()` -- Returns the index of the first element in the array that satisfies the provided testing function, or -1 if no appropriate element was found.
+  - `Array.prototype.flat()` -- Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+  - `Array.prototype.forEach()` -- Calls a function for each element in the calling array
+  - `Array.prototype.includes()` -- Determines whether the calling array contains a value, returning true or false as appropriate.
+
+    ```js
+    const fruits = ['Apple', 'Banana'];
+
+    fruits.includes('Banana'); // true
+    fruits.includes('Cherry'); // false
+
+    // If indexOf() doesn't return -1, the array contains the given item.
+    fruits.indexOf('Banana') !== -1; // true
+    fruits.indexOf('Cherry') !== -1; // false
+    ```
+  - `Array.prototype.indexOf()` -- Returns the first (least) index at which a given element can be found in the calling array.
+  - `Array.prototype.join()` -- Joins all elements of an array into a string.
+  - `Array.prototype.map()` -- Returns a new array containing the results of invoking a function on every element in the calling array.
+  - `Array.prototype.pop()` -- Removes the last element from an array and returns that element.
+  - `Array.prototype.push()` -- Adds one or more elements to the end of an array, and returns the new length of the array.
+  - `Array.prototype.reduce()` -- Executes a user-supplied "reducer" callback function on each element of the array (from left to right), to reduce it to a single value.
+
+    ```js
+    const array1 = [1, 2, 3, 4];
+
+    // 0 + 1 + 2 + 3 + 4
+    const initialValue = 0;
+    const sumWithInitial = array1.reduce(
+      (previousValue, currentValue) => previousValue + currentValue,
+      initialValue
+    );
+
+    console.log(sumWithInitial);
+    // expected output: 10
+    ```
+  - `Array.prototype.reverse()` -- Reverses the order of the elements of an array in place. (First becomes the last, last becomes first.)
+  - `Array.prototype.shift()` -- Removes the first element from an array and returns that element.
+  - `Array.prototype.slice()` -- Extracts a section of the calling array and returns a new array.
+  - `Array.prototype.some()` -- Returns true if at least one element in the calling array satisfies the provided testing function.
+  - `Array.prototype.sort()` -- Sorts the elements of an array in place and returns the array.
+  - `Array.prototype.splice()` -- Adds and/or removes elements from an array.
+  - `Array.prototype.toString()` -- Returns a string representing the calling array and its elements. Overrides the Object.prototype.toString() method.
+
 ### What is the difference between Array.forEach() and Array.map()? 
+- `Array.forEach()` - calls a function on each element in an array
+- `Array.map()` - creates a new array populated with the results of calling a provided function on every element in the calling array
 
 ## Functions 
 
 ### What are lambda or arrow functions?
+An arrow function expression is a compact alternative to a traditional function expression.
+
+```js
+// Traditional Anonymous Function
+(function (a) {
+  return a + 100;
+});
+
+// Arrow Function Break Down
+
+// 1. Remove the word "function" and place arrow between the argument and opening body bracket
+(a) => {
+  return a + 100;
+};
+
+// 2. Remove the body braces and word "return" — the return is implied.
+(a) => a + 100;
+
+// 3. Remove the argument parentheses
+a => a + 100;
+```
 ### What is a first class function?
+functions in JS are treated like any other variable: a function can be passed as an argument to other functions (callback function), can be returned by another function and can be assigned as a value to a variable.
+
 ### What is a first order function?
 ### What is a higher order function?
 ### What is a unary function?
 ### What is the currying function?
 ### What is a pure function?
 ### What are closures?
-### What is IIFE(Immediately Invoked Function Expression)? 
-### What is a callback function?
+### What is IIFE(Immediately Invoked Function Expression)?
 ### What is an anonymous function?
+The main difference between a `function expression` and a `function declaration` is `the function name`, which can be omitted in function expressions to create anonymous functions.
 
 ## Async JavaScript 
 
-### What is a promise?
-### Why do you need a promise?
-### What are the three states of promise?
+### What is a callback function?
+A callback function is a function passed into another function as an argument, which is then invoked inside the outer function to complete some kind of routine or action.
+```js
+function loadScript(src, callback) {
+  let script = document.createElement('script');
+  script.src = src;
+  script.onload = () => callback(script);
+  document.head.append(script);
+}
+
+loadScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js', script => {
+  alert(`Cool, the script ${script.src} is loaded`);
+});
+```
 ### Why do we need callbacks?
+
 ### What is a callback hell?
+doing several asynchronous operations in a row with callbacks
+
+nested callbacks stacked below one another forming a pyramid structure: every callback depends/waits for the previous callback
+
+```js
+loadScript('/my/script.js', function(script) {
+
+  loadScript('/my/script2.js', function(script) {
+
+    loadScript('/my/script3.js', function(script) {
+      // ...continue after all scripts are loaded
+    });
+
+  });
+
+});
+
+```
+### What is a promise?
+A `Promise` is an object representing the eventual completion or failure of an asynchronous operation, to which you attach callbacks, instead of passing callbacks into a function
+
+- A `producing code` that does something and takes time.
+- A `consuming code` that wants the result of the “producing code” once it’s ready.
+- A promise is a special JavaScript object that links the `producing code` and the `consuming code` together: the `producing code` takes whatever time it needs to produce the promised result, and the `promise` makes that result available to all of the subscribed code when it’s ready.
+
+```js
+let promise = new Promise(
+  function(resolve, reject) { // executor (the producing code; resolve and reject are callbacks provided by JS engine)
+    setTimeout(() => resolve('done'), 1000);
+  // after 1 second signal that the job is done with the result "done"
+  }
+);
+```
+or
+```js
+let promise = new Promise(function(resolve, reject) {
+  setTimeout(() => reject(new Error("Whoops!")), 1000);
+});
+```
+The executor runs automatically and attempts to perform a job. When it is finished, it calls `resolve(value)` (if the job is finished successfully, with result `value`) or `reject(error)` if an error has occurred, `error` is the error object
+
+Consuming functions can be registered (subscribed) using the methods `.then` and `.catch`.
+
+```js
+promise.then(
+  // resolve runs the first function in .then
+  result => alert(result), // shows "done!" after 1 second
+  error => alert(error) // doesn't run
+);
+```
+or
+```js
+promise.then(
+  // reject runs the second function in .then
+  result => alert(result), // doesn't run
+  error => alert(error) // shows "Error: Whoops!" after 1 second
+);
+```
+
+If we’re interested only in errors, then we can use `null` as the first argument: `.then(null, errorHandlingFunction)`. Or we can use `.catch(errorHandlingFunction)`
+
+```js
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => reject(new Error("Whoops!")), 1000);
+});
+// .catch(f) is the same as promise.then(null, f)
+promise.catch(alert); // shows "Error: Whoops!" after 1 second
+```
+do a generic cleanup, no matter what the outcome was:
+
+```js
+new Promise((resolve, reject) => {
+  setTimeout(() => resolve("value"), 2000);
+})
+  // runs when the promise is settled, doesn't matter successfully or not
+  .finally(() => alert('Promise ready')) // triggers first
+  .then(result => alert(result)); // <-- .then shows "value"
+```
+### Why do you need a promise?
+
+### What are the three states of promise?
+
+The `promise` object returned by the `new Promise` constructor has these internal properties:
+**state** — initially `pending`, then (`settled` promise) changes to either `fulfilled` when resolve is called or `rejected` when reject is called.
+**result** — initially `undefined`, then changes to `value` when `resolve(value)` is called or `error` when `reject(error)` is called.
+
 ### What is promise chaining?
+we have a sequence of asynchronous tasks to be performed one after another
+Here each `loadScript` call returns a promise, and the next `.then` runs when it resolves. Then it initiates the loading of the next script.
+
+```js
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    let script = document.createElement('script');
+    script.src = src;
+
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error(`Script load error for ${src}`));
+
+    document.head.append(script);
+  });
+}
+
+loadScript("/article/promise-chaining/one.js")
+  .then(function(script) {
+    return loadScript("/article/promise-chaining/two.js");
+  })
+  .then(function(script) {
+    return loadScript("/article/promise-chaining/three.js");
+  })
+  .then(function(script) {
+    // use functions declared in scripts
+    // to show that they indeed loaded
+    one();
+    two();
+    three();
+  });
+```
+or w/ arrow functions:
+```js
+loadScript("/article/promise-chaining/one.js")
+  .then(script => loadScript("/article/promise-chaining/two.js"))
+  .then(script => loadScript("/article/promise-chaining/three.js"))
+  .then(script => {
+    // scripts are loaded, we can use functions declared there
+    one();
+    two();
+    three();
+  });
+```
 ### What is promise.all?
+we want many promises to execute in parallel and wait until all of them are ready
+`Promise.all` rejects as a whole if any promise rejects.
+```js
+let promise = Promise.all(iterable); // iterable usually is, an array of promises
+```
+
+```js
+Promise.all([
+  new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
+  new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
+  new Promise(resolve => setTimeout(() => resolve(3), 1000))  // 3
+]).then(alert); // 1,2,3 when promises are ready: each promise contributes an array member
+```
+map an array of data into an array of promises, and then wrap that into `Promise.all`
+
+```js
+let urls = [
+  'https://api.github.com/users/iliakan',
+  'https://api.github.com/users/remy',
+  'https://api.github.com/users/jeresig'
+];
+
+// map every url to the promise of the fetch
+let requests = urls.map(url => fetch(url));
+
+// Promise.all waits until all jobs are resolved
+Promise.all(requests)
+  .then(responses => responses.forEach(
+    response => alert(`${response.url}: ${response.status}`)
+  ));
+```
 ### What is the purpose of race method in promise?
+Similar to [`Promise.all`](https://github.com/szkertesz/crack-ti/blob/main/questions/js.md#what-is-promiseall), but waits only for the first settled promise and gets its result (or error).
+
+```js
+Promise.race([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+]).then(alert); // 1
+```
 ### What is the use of setTimeout?
 ### What is the use of setInterval?
 ### What is an event loop?
