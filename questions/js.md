@@ -671,7 +671,7 @@ if (isHappyHour) {
 - **Global Execution Context (GEC)**
     Execution Context => Execution Context Object (ECO)
     1. Creation phase of EC
-       1. Creation of the Variable Object (VO)
+       1. Creation of the Variable Object (VO) or *Environment Record*
           1. for each variable declared with the `var` keyword, a property is added to VO that points to that variable and is set to 'undefined'. = **Hoisting**
           2. every function declaration, a property is added to the VO, pointing to that function, and that property is stored in memory
 
@@ -729,6 +729,24 @@ if (isHappyHour) {
 | Creates the `this` object that stores all the variables and functions in the Global scope as methods and properties.| Doesn't create the `this` object, but has access to that of the environment in which it is defined. Usually the `window` object. |
 | Can't access the code of the Function contexts defined in it | Due to scoping, has access to the code(variables and functions) in the context it is defined and that of its parents |
 | Sets up memory space for variables and functions defined globally | Sets up memory space only for variables and functions defined within the function.|
+
+https://javascript.info/closure
+
+In JavaScript, every running function, code block {...}, and the script as a whole have an internal (hidden) associated object known as the `Lexical Environment`.
+
+The *Lexical Environment* object consists of two parts:
+- `Environment Record` – an object that stores all local variables as its properties (and some other information like the value of this).
+
+  A “variable” is just a property of the special internal object, Environment Record. “To get or change a variable” means “to get or change a property of that object”.
+
+- A `reference to the outer lexical environment`, the one associated with the outer code.
+
+A **function** is also a value, like a variable. The difference is that a Function Declaration is instantly fully initialized.
+
+When a function runs, at the beginning of the call, a new Lexical Environment is created automatically to store local variables and parameters of the call -- *inner Lexical Environment* (The outer Lexical Environment could be the global Lexical Environment.)
+
+*When the code wants to access a variable – the inner Lexical Environment is searched first, then the outer one, then the more outer one and so on until the global one.*
+
 
 ### What is the difference between Call, Apply and Bind?
 
@@ -887,6 +905,7 @@ const jsonText = `{
 console.log(JSON.parse(jsonText));
 ```
 ### Why do you need JSON?
+
 ### What is the purpose JSON stringify?
 The `JSON.stringify()` method converts a JavaScript value to a JSON string, optionally replacing values if a *replacer function* is specified or optionally including only the specified properties if a *replacer array* is specified.
 
@@ -977,7 +996,58 @@ JSON Array is almost same as JavaScript Array. JSON array can store values of ty
 ## Array methods 
 
 ### What is the purpose of the array slice method?
+returns a new array copying to it all items from index `start` to `end` (not including `end`).
+```js
+arr.slice([start], [end])
+```
+```js
+let arr = ["t", "e", "s", "t"];
+
+alert( arr.slice(1, 3) ); // e,s (copy from 1 to 3)
+
+alert( arr.slice(-2) ); // s,t (copy from -2 till the end)
+```
+`arr.slice()` creates a copy of `arr` -- often used to obtain a copy for further transformations that should not affect the original array.
+
 ### What is the purpose of the array splice method?
+```js
+arr.splice(start[, deleteCount, elem1, ..., elemN])
+```
+```js
+let arr = ["I", "study", "JavaScript"];
+
+arr.splice(1, 1); // from index 1 remove 1 element
+
+alert( arr ); // ["I", "JavaScript"]
+```
+```js
+let arr = ["I", "study", "JavaScript", "right", "now"];
+
+// remove 3 first elements and replace them with another
+arr.splice(0, 3, "Let's", "dance");
+
+alert( arr ) // now ["Let's", "dance", "right", "now"]
+```
+
+```js
+let arr = ["I", "study", "JavaScript"];
+// from index 2
+// delete 0
+// then insert "complex" and "language"
+arr.splice(2, 0, "complex", "language");
+
+alert( arr ); // "I", "study", "complex", "language", "JavaScript"
+```
+```js
+let arr = [1, 2, 5];
+
+// from index -1 (one step from the end)
+// delete 0 elements,
+// then insert 3 and 4
+arr.splice(-1, 0, 3, 4);
+
+alert( arr ); // 1,2,3,4,5
+```
 ### What array methods do you know?
 - Static methods
   - `Array.from()` -- Creates a new Array instance from an array-like object or iterable object.
@@ -1226,7 +1296,9 @@ loadScript("/article/promise-chaining/one.js")
 ```
 ### What is promise.all?
 we want many promises to execute in parallel and wait until all of them are ready
+
 `Promise.all` rejects as a whole if any promise rejects.
+
 ```js
 let promise = Promise.all(iterable); // iterable usually is, an array of promises
 ```
@@ -1238,7 +1310,7 @@ Promise.all([
   new Promise(resolve => setTimeout(() => resolve(3), 1000))  // 3
 ]).then(alert); // 1,2,3 when promises are ready: each promise contributes an array member
 ```
-map an array of data into an array of promises, and then wrap that into `Promise.all`
+map an array of data into an array of promises, and then wrap that into `Promise.all`:
 
 ```js
 let urls = [
@@ -1267,8 +1339,96 @@ Promise.race([
 ]).then(alert); // 1
 ```
 ### What is the use of setTimeout?
+We may decide to execute a function not right now, but at a certain time later. That’s called *scheduling a call*.
+
+`setTimeout` allows us to run a function once after the interval of time.
+
+```js
+function sayHi() {
+  alert('Hello');
+}
+
+setTimeout(sayHi, 1000); // calls sayHi() after one second
+```
+cancelink w/ `clearTimeout`:
+
+```js
+let timerId = setTimeout(() => alert("never happens"), 1000);
+alert(timerId); // timer identifier
+
+clearTimeout(timerId);
+alert(timerId); // same identifier (doesn't become null after canceling)
+```
+nested `setTimeout`
+
+```js
+/** instead of:
+let timerId = setInterval(() => alert('tick'), 2000);
+*/
+
+let timerId = setTimeout(function tick() {
+  alert('tick');
+  timerId = setTimeout(tick, 2000); // (*)
+}, 2000);
+```
 ### What is the use of setInterval?
+We may decide to execute a function not right now, but at a certain time later. That’s called *scheduling a call*.
+
+`setInterval` allows us to run a function repeatedly, starting after the interval of time, then repeating continuously at that interval.
+
+This will show the message every 2 seconds. After 5 seconds, the output is stopped:
+
+```js
+// repeat with the interval of 2 seconds
+let timerId = setInterval(() => alert('tick'), 2000);
+
+// after 5 seconds stop
+setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
+```
+
+the time taken by func's execution *consumes* a part of the interval => if the function always executes longer than `delay` ms, then the calls will happen without a pause at all
+
 ### What is an event loop?
+There’s an endless loop, where the JavaScript engine waits for tasks, executes them starting with the oldest task and then sleeps, waiting for more tasks.
+
+It may happen that a task comes while the engine is busy, then it’s enqueued.
+
+- Rendering never happens while the engine executes a task. Changes to the DOM are painted only after the task is complete.
+
+- If a task takes too long, the browser can’t do other tasks, such as processing user events.
+
+**Macrotasks & Microtasks**
+Microtasks are usually created by promises: an execution of `.then/catch/finally` handler or `await` becomes a microtask.
+
+Immediately after every macrotask, the engine executes all tasks from microtask queue, prior to running any other macrotasks or rendering or anything else.
+
+
+```js
+setTimeout(() => alert("timeout")); // timeout shows last, because it’s a macrotask.
+
+Promise.resolve()
+  .then(() => alert("promise")); // promise shows second, because .then passes through the microtask queue, and runs after the current code.
+
+alert("code"); // code shows first, because it’s a regular synchronous call
+```
+
+1. Dequeue and run the oldest task from the macrotask queue (e.g. “script”).
+2. Execute all microtasks:
+   - While the microtask queue is not empty:
+     - Dequeue and run the oldest microtask.
+
+3. Render changes if any.
+4. If the macrotask queue is empty, wait till a macrotask appears.
+5. Go to step 1.
+
+To schedule a new macrotask:
+- Use zero delayed `setTimeout(f)`.
+
+To schedule a new microtask:
+- Use queueMicrotask(f).
+- Also promise handlers go through the microtask queue.
+
+
 ### What is call stack?
 
 ## Common 
