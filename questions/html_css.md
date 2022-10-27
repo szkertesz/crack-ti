@@ -66,6 +66,29 @@ https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduct
 ### How can I get indexed better by search engines?
 ### Ways to improve website performance
 ### What does async and defer refer in script tag? Describe the difference between `<script>`, `<script async>` and `<script defer>`
+
+When the browser loads HTML and comes across a `<script>...</script>` tag or `<script src="..."></script>` external script, it can’t continue building the DOM. It must execute the script right now / must wait for the script to download, execute the downloaded script, and only then can it process the rest of the page.
+
+In practice, `defer` is used for scripts that need the whole DOM and/or their relative execution order is important.
+And `async` is used for independent scripts, like counters or ads. And their relative execution order does not matter.
+
+- **defer**
+
+  `defer` attribute tells the browser not to wait for the script. Instead, the browser will continue to process the HTML, build DOM. The script loads “in the background”, and then runs when the DOM is fully built.
+
+  - never block the page
+  - always execute when the DOM is ready (but before `DOMContentLoaded` event)
+  - *Document order* - Deferred scripts keep their relative order (like regular scripts). [Browsers scan the page for scripts and download them in parallel; `defer` attribute ensures that the relative order is kept. So even though `small.js` loads first, it still waits and runs after `long.js` executes]
+  - is ignored if the `<script>` tag has no src -- only works for external scripts
+
+- **async**
+
+    - also makes the script non-blocking -- loads in the background
+    - *Load-first order* - The DOM and other scripts don’t wait for them, and they don’t wait for anything. A fully independent script that runs when loaded.
+    - like `defer`, the `async` attribute is ignored if the `<script>` tag has no src -- is only for external scripts
+
+
+
 ### What is desktop first and mobile first design approach?
 ### How to make page responsive?
 ### What are the building blocks of HTML5?
