@@ -133,6 +133,49 @@ or chronologically: *LIAR*
 </table>
 
 ### What are the Benefits of Server Side Rendering (SSR) Over Client Side Rendering (CSR)?
+https://web.dev/rendering-on-the-web/
+
+**Server rendering** generates the full HTML for a page on the server in response to navigation. This avoids additional round-trips for data fetching and templating on the client, since it’s handled before the browser gets a response.
+
+Server rendering generally produces a fast First Paint (FP) and First Contentful Paint (FCP). Running page logic and rendering on the server makes it possible to avoid sending lots of JavaScript to the client, which helps achieve a fast Time to Interactive (TTI). However, generating pages on the server takes time, which can often result in a slower Time to First Byte (TTFB).
+
+**Static rendering** happens at build-time and offers a fast First Paint, First Contentful Paint and Time To Interactive - assuming the amount of client-side JS is limited. Unlike Server Rendering, it also manages to achieve a consistently fast Time To First Byte, since the HTML for a page doesn’t have to be generated on the fly.
+
+One of the downsides to static rendering is that individual HTML files must be generated for every possible URL. This can be challenging or even infeasible when you can't predict what those URLs will be ahead of time, or for sites with a large number of unique pages.
+
+**Client-side rendering (CSR)** means rendering pages directly in the browser using JavaScript. All logic, data fetching, templating and routing are handled on the client rather than the server.
+
+can be difficult to get and keep fast for mobile
+
+The primary downside to Client-Side Rendering is that the amount of JavaScript required tends to grow as an application grows.
+
+Experiences built with CSR that rely on large JavaScript bundles should consider aggressive code-splitting, and be sure to lazy-load JavaScript
+
+
+
+
+
+Server-side pros:
+- Search engines can crawl the site for better SEO.
+- The initial page load is faster.
+- Great for static sites.
+
+Server-side cons:
+- Frequent server requests.
+- An overall slow page rendering.
+- Full page reloads.
+- Non-rich site interactions.
+
+Client-side pros:
+- Rich site interactions
+- Fast website rendering after the initial load.
+- Great for web applications.
+- Robust selection of JavaScript libraries.
+
+Client-side cons:
+- Low SEO if not implemented correctly.
+- Initial load might require more time.
+- In most cases, requires an external library.
 ### How can I get indexed better by search engines?
 ### Ways to improve website performance
 ### What does async and defer refer in script tag? Describe the difference between `<script>`, `<script async>` and `<script defer>`
