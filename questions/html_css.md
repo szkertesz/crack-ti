@@ -62,6 +62,76 @@ The DOM is a *programming interface for web documents*. It *represents the page 
 https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction
 
 ### Explain the difference between layout, painting and compositing?
+
+https://web.dev/rendering-performance/
+
+The CSSOM and DOM trees (based on the HTML and CSS input) are combined into a **render tree**, which is then used to compute the layout of each visible element and serves as an input to the paint process that renders the pixels to screen.
+
+1. The DOM (all visible DOM content) and CSSOM (style information) trees are combined to form the *render tree*. Render tree contains only the nodes required to render the page.
+2. *Layout* computes the exact position and size of each object within the viewport -- aka. *Reflow* => *"box model"*
+3. The last step is *paint*, which takes in the final render tree and renders the pixels to the screen.
+
+    ~ the process of filling in pixels. It involves drawing out every visual part of the elements. The drawing is typically done onto multiple surfaces, often called *layers*.
+
+4. *Compositing*. Since the parts of the page were drawn into potentially multiple layers they need to be drawn to the screen in the correct order so that the page renders correctly. This is especially important for elements that overlap another.
+
+
+60 Hz = 60fps *framereate*
+
+1. HTTP Get req
+2. *Parse HTML* - get all the nodes => DOM
+3. DOM + CSS - *Recalculate styles*
+4. *Render tree* - no `<head>`, `<script>`s, `display: none;`-ed elements but also *pseudo elements*
+5. *Layout* ~ *Reflow* how much space elements take up & where they are on screen
+6. *Paint* - vector to raster
+   1. creating a list of `draw` calls (`drawRectangle`, `drawText`) & *Image decode + Resize*
+   2. filling in pixels
+7. Composite layers - put the individual layers (painted parts of the page) together, involves *layer management* (the right layers are in the correct order) [load all the above from CPU to GPU]
+
+1. a visual change via JS / CSS animations / Web Animation API
+2. Style
+3. [Layout / Reflow] - not happens eg. on background change
+4. [Paint] - eg. `opacity` & `transform` only triggers composite
+5. Composite
+
+|
+v
+
+- Stick to `transform`s and `opacity` changes for animations (handled by compositor only)
+- Promote moving elements with `will-change` or `translateZ`.
+  
+  ```css
+  .moving-element {
+    will-change: transform;
+    // or
+    transform: translateZ(0);
+  }
+  ```
+- Avoid overusing promotion rules; layers require memory and management.
+
+
+**RAIL**
+or chronologically: *LIAR*
+
+<table>
+  <tr>
+    <th><strong>R</strong>esponse</th>
+    <td>100ms (the human mind has this grace period for an interaction)</td>
+  </tr>
+  <tr>
+    <th><strong>A</strong>nimate</th>
+    <td>16ms (1s / 60)</td>
+  </tr>
+  <tr>
+    <th><strong>I</strong>dle</th>
+    <td>50ms</td>
+  </tr>
+  <tr>
+    <th><strong>L</strong>oad</th>
+    <td>1 s</td>
+  </tr>
+</table>
+
 ### What are the Benefits of Server Side Rendering (SSR) Over Client Side Rendering (CSR)?
 ### How can I get indexed better by search engines?
 ### Ways to improve website performance

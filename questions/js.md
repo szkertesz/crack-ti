@@ -1540,7 +1540,15 @@ import {sayHi} from './sayHi.js';
 alert(sayHi); // function...
 sayHi('John'); // Hello, John!
 ```
-we must tell the browser that a script should be treated as a module, by using the attribute `<script type="module">`
+- we must tell the browser that a script should be treated as a module, by using the attribute `<script type="module">`
+- Modules always work in strict mode.
+- Modules work only via HTTP(s), not locally
+- Each module has its own, local top-level scope: variables and functions from a module are not seen in other scripts -- we use import/export instead of relying on global variables
+- Module scripts are deferred by default
+  - downloading external module scripts <script type="module" src="..."> doesn’t block HTML processing, they load in parallel with other resources.
+  - module scripts wait until the HTML document is fully ready (even if they are tiny and load faster than HTML), and then run.
+  - relative order of scripts is maintained: scripts that go first in the document, execute first.
+- Module code is executed only once. Exports are created once and shared between importers.
 
 ### Why do you need modules?
 ### How do you detect a mobile browser?
