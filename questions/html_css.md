@@ -176,8 +176,18 @@ Client-side cons:
 - Low SEO if not implemented correctly.
 - Initial load might require more time.
 - In most cases, requires an external library.
+
 ### How can I get indexed better by search engines?
 ### Ways to improve website performance
+
+https://www.dropbox.com/s/34noajrbm324iai/performance-checklist-1.4.pdf?dl=0
+
+https://www.smashingmagazine.com/2021/01/front-end-performance-2021-free-pdf-checklist/
+
+https://csswizardry.com/2020/11/site-speed-topography/
+https://csswizardry.com/2022/03/optimising-largest-contentful-paint/
+
+
 ### What does async and defer refer in script tag? Describe the difference between `<script>`, `<script async>` and `<script defer>`
 
 When the browser loads HTML and comes across a `<script>...</script>` tag or `<script src="..."></script>` external script, it can’t continue building the DOM. It must execute the script right now / must wait for the script to download, execute the downloaded script, and only then can it process the rest of the page.
