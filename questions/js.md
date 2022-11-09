@@ -1353,7 +1353,29 @@ https://medium.com/front-end-weekly/javascript-pure-functions-for-oop-developers
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 
-### What is IIFE(Immediately Invoked Function Expression)?
+### What is IIFE (Immediately Invoked Function Expression)?
+
+An IIFE (aka. Self-Executing Anonymous Function) is a JavaScript function that runs as soon as it is defined.
+
+contains two major parts:
+
+1. the anonymous function with lexical scope enclosed within the Grouping Operator `()`. This prevents accessing variables within the IIFE idiom as well as polluting the global scope.
+2. the another part creates the IIFE `()` through which the JavaScript engine will directly interpret the function.
+
+```js
+(function () {
+  // …
+})();
+
+(() => {
+  // …
+})();
+
+(async () => {
+  // …
+})();
+```
+
 ### What is an anonymous function?
 The main difference between a `function expression` and a `function declaration` is `the function name`, which can be omitted in function expressions to create anonymous functions.
 
