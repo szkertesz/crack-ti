@@ -333,7 +333,7 @@ When you declare a variable outside of any function, it is called a *global vari
 
 - **Security** - Specifically on the web, every user has access to the Window (or global) object. By putting variables on the global scope, you give any user the ability to see or change your variables.
 
-3) **Performance** - This is almost negligible, but it still exists. The way JavaScript variable lookups work is the JavaScript engine will do a lookup on the current scope the variable is being looked up in. If it can't find it, it will do a look up on the next parent scope. If it doesn't find it there, it will continue looking upward until it reaches the global object looking for that variable. If all of your variables are located on the global scope, the JavaScript engine will always have to go through every scope in order to finally reach the global scope to find the variable.
+- **Performance** - This is almost negligible, but it still exists. The way JavaScript variable lookups work is the JavaScript engine will do a lookup on the current scope the variable is being looked up in. If it can't find it, it will do a look up on the next parent scope. If it doesn't find it there, it will continue looking upward until it reaches the global object looking for that variable. If all of your variables are located on the global scope, the JavaScript engine will always have to go through every scope in order to finally reach the global scope to find the variable.
 
 ### What is NaN property?
 NaN - a value representing Not-A-Number, typically encountered when the result of an arithmetic operation cannot be expressed as a number
