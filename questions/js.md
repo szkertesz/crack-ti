@@ -1186,14 +1186,173 @@ An arrow function expression is a compact alternative to a traditional function 
 a => a + 100;
 ```
 ### What is a first class function?
-functions in JS are treated like any other variable: a function can be passed as an argument to other functions (callback function), can be returned by another function and can be assigned as a value to a variable.
+JS has first-class functions since functions in JS are treated like any other variable: a function
+- can be passed as an argument to other functions (callback function),
+- can be returned by another function and
+- *can be assigned as a value to a variable* / be stored in a variable. Also,
+- can be stored in some data structure and
+- can hold their own properties and methods.
+
+```js
+// Function definition and invocation
+function speak(string) {
+  console.log(string);
+}
+speak("Hello");                     // logs "Hello"
+
+// Store in a variable
+var talk = speak;
+talk("Hi");                         // logs "Hi"
+
+// Pass as an argument to a function
+// Return from a function
+function functionReturner(fn) {
+  return fn;
+}
+var chat = functionReturner(talk);
+chat("Good Morning");               // logs "Good Morning"
+
+// Store in a data structure
+var myFuncs = [talk];
+myFuncs[0]("Good Afternoon");       // logs "Good Afternoon"
+
+// Owns properties
+talk.myProperty = "bananas";
+console.log(talk.myProperty);       // logs "bananas"
+```
+
+use cases:
+
+- as a parameter of a higher order function (eg. in `Array.prototype.map` or in *partial function application*)
+- in async functions:
+
+    ```js
+    function speak(string) {
+      console.log(string);
+    }
+
+    var delayedFunction = function(fn) {
+      return function(val, delay) {
+        setTimeout(function() {
+          fn(val);
+        }, delay);
+      };
+    };
+
+    var delayedSpeak = delayedFunction(speak);
+    delayedSpeak("I'm late!", 1000);      // logs "I'm late" after a 1 second delay
+    ```
+- when assigning *handlers* to listeners
 
 ### What is a first order function?
+
+a first-class function ?
+
 ### What is a higher order function?
+
+A higher-order function is one that either has a function as a parameter, or returns a function. In other words, higher-order functions do work on other functions.
+
+```js
+var myNums = [1, 2, 3, 4, 5];
+
+function doubleNum(num) {
+  return num * 2;
+}
+
+// Built-in Array.prototype.map function, using anonymous function argument
+var doubledNums = myNums.map(function(num) {
+  return num * 2;
+});
+console.log(doubledNums);           // logs "[2, 4, 6, 8, 10]"
+
+// Built-in Array.prototype.map function, using named callback argument
+var otherDoubledNums = myNums.map(doubleNum);
+console.log(otherDoubledNums);      // logs "[2, 4, 6, 8, 10]"
+```
+*partial function application* -- In this pattern, we write a function that accepts another function as a parameter. The function then returns a new function that has the same functionality as the one we provided as an argument but with some value pre-applied to it.
+
+```js
+function applicator(fn, val) {
+  return function() {
+    fn(val);
+  };
+}
+
+function speak(string) {
+  console.log(string);
+}
+
+var sayHello = applicator(speak, "Hello");
+sayHello(); // logs "Hello";
+```
+
 ### What is a unary function?
+
+The term relates to arity of a number of arguments accepted by a function. Unary function (i.e. monadic) is a function that accepts exactly one argument.
+
+```js
+const unaryFunction = message => console.log (message);
+const binaryFunction = (color, message) =>
+  console.log (`%c${message}`, `color:${color}`);
+const ternaryFunction = (fnc, color, message) =>
+  fnc (`%c${message}`, `color:${color}`);
+```
+
+https://medium.com/front-end-weekly/6-fundamental-terms-in-functional-javascript-e25d50d40b2c
+
 ### What is the currying function?
+
+Currying is the process of taking a function with multiple arguments and turning it into a sequence of functions each with only a single argument. Therefor with currying you take a n-ary function and you turn it into a unary function:
+
+```js
+const binaryFunction = (a, b) => a + b;
+const curryUnaryFunction = a => b => a + b;
+curryUnaryFunction (1); // returns a function: b => 1 + b
+curryUnaryFunction (1) (2); // returns the number 3
+```
+https://medium.com/front-end-weekly/javascript-es6-curry-functions-with-practical-examples-6ba2ced003b1
+
 ### What is a pure function?
+
+A pure function is a function where the return value is only determined by its arguments without any side effects.
+
+That means that if you give a pure function the same argument a hundred times in a hundred different places of your whole application, the function will always return the same value. No external states will be changed or read by the pure function.
+
+```js
+let myArray = [];
+const impureAddNumber = number => myArray.push (number);
+const pureAddNumber = number => anArray =>
+  anArray.concat ([number]);
+console.log (impureAddNumber (2)); // returns 1
+console.log (myArray); // returns [2]
+console.log (pureAddNumber (3) (myArray)); // returns [2, 3]
+console.log (myArray); // returns [2]
+myArray = pureAddNumber (3) (myArray);
+console.log (myArray); // returns [2, 3]```
+
+`push` function is impure itself and it alters the array it is called on and as such produces a side effect. The return value of `push` is a number index.
+
+`concat` on the other hand takes the array and concatenates it with the other array producing a whole new array without side effects. The new array as concatenation of the previous array is then returned.
+
+**Side effects** are anything outside of the function that either influences it or is influenced by it.
+
+```js
+let state = 0;
+const yourFunction = () => state = state + 1;
+```
+
+In the above code, you can see that `yourFunction` depends on the variable `state` and also changes its value on every run, that is a side effect. Without knowing the current value of `state`, you are not able to predict the output of `yourFunction`. Because you don’t know whether other functions are also working with the same variable, you are potentially affecting them as well.
+
+The change of the variable `state` is called **mutation**. JavaScript has the keyword `let` to indicate mutable variables and `const` to indicate immutable variables.
+
+https://medium.com/front-end-weekly/6-fundamental-terms-in-functional-javascript-e25d50d40b2c
+
+https://medium.com/front-end-weekly/javascript-pure-functions-for-oop-developers-5fc9020541a8
+
 ### What are closures?
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
+
 ### What is IIFE(Immediately Invoked Function Expression)?
 ### What is an anonymous function?
 The main difference between a `function expression` and a `function declaration` is `the function name`, which can be omitted in function expressions to create anonymous functions.
